@@ -3,17 +3,19 @@ LABEL maintainer="Jabba"
 
 ENV PYTHONUNBUFFERED 1
 
+## Install dependencies (before copying the app to use cache)
 COPY ./django-build/requirements.txt /requirements.txt
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    /py/bin/pip install -r /requirements.txt
+
 COPY ./app /app
 COPY ./django-build/scripts /scripts
 
 WORKDIR /app
 EXPOSE 8000
 
-RUN python -m venv /py && \
-    /py/bin/pip install --upgrade pip && \
-    /py/bin/pip install -r /requirements.txt && \
-    adduser app && \
+RUN adduser app && \
     mkdir -p /vol/web/static && \
     mkdir -p /vol/web/media && \
     chown -R app:app /vol && \

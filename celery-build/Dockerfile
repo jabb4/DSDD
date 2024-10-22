@@ -3,16 +3,18 @@ LABEL maintainer="Jabba"
 
 ENV PYTHONUNBUFFERED 1
 
+## Install dependencies (before copying the app to use cache)
 COPY ./celery-build/requirements.txt /requirements.txt
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    /py/bin/pip install -r /requirements.txt
+
 COPY ./app /app
 COPY ./celery-build/scripts /scripts
 
 WORKDIR /app
 
-RUN python -m venv /py && \
-    /py/bin/pip install --upgrade pip && \
-    /py/bin/pip install -r /requirements.txt && \
-    adduser celery && \
+RUN adduser celery && \
     chmod -R +x /scripts
 
 ENV PATH="/scripts:/py/bin:$PATH"
