@@ -1,17 +1,15 @@
 input {
     outline: none;
-    height: 40px;
     border: none;
-    border-radius: 7px;
-    background-color: #fff;
-    color: #000;
+    border-radius: 13px;
+    background-color: #353535;
+    color: #ffffff;
     padding: 3px 20px;
     box-sizing: border-box;
     width: 100%;
 }
 
 input[type=submit] {
-    height: 50px;
     width: auto;
     cursor: pointer;
 }

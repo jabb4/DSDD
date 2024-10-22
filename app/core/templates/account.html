@@ -11,14 +11,78 @@
         <div id="delete_user_title"><p>Are you sure you want to delete your account?</p></div>
         <form id="delete_user_form" class="form_form" action="" method="POST">
             {% csrf_token %}
-            {% for field in form %}
-                <div class="form_field">{{field}}</div>
-            {% endfor %}
-            <input class="form_submit" type="submit" value="Delete Account">
+            <input id="delete_user_input" type="text" name="delete_user_password" placeholder="Current Password" required>
+            <input id="delete_user_submit" type="submit" name="delete_user_password_submit" value="Delete Account">
         </form>
     </div>
     {% else %}
+    <div id="edit_user_title">
+        <p>Manage Account</p>
+    </div>
     <div id="edit_user">
+        <div id="api_keys">
+            <div id="api_keys_title">
+                <p>My API Keys</p>
+            </div>
+            <div id="my_api_keys">
+                {% for key in api_keys %}
+                <div class="api_key">
+                    <div class="api_key_key">
+                        <p>{{key.api_key}}</p>
+                    </div>
+                    <div class="api_key_delete">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="api_key_id" value="{{key.id}}">
+                            <input class="delete_api_key" type="submit" name="delete_api_key" value="X">
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="new_api_key">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input id="new_api_key_button" type="submit" name="new_api_key" value="Generate New API Key">
+                </form>
+            </div>
+        </div>
+        <div id="edit_user_fields">
+            <div id="edit_user_fields_title">
+                <p>Update Account Info</p>
+            </div>
+            <div class="update_user">
+                <div class="update_user_title">
+                    <p>Update Username</p>
+                </div>
+                <form class="update_user_form" action="" method="POST">
+                    {% csrf_token %}
+                    <input class="update_user_input" type="username" name="update_username" value="{{user.username}}" placeholder="Username" required>
+                    <input class="update_user_input" type="password" name="update_username_password" placeholder="Current Password" required>
+                    <input class="update_user_submit" type="submit" name="submit_username" value="Save">
+                </form>
+            </div>
+            <div class="update_user">
+                <div class="update_user_title">
+                    <p>Update Password</p>
+                </div>
+                <form class="update_user_form" action="" method="POST">
+                    {% csrf_token %}
+                    <input class="update_user_input" type="password" name="updated_password" placeholder="New Password" required>
+                    <input class="update_user_input" type="password" name="repeat_updated_password" placeholder="Repeat New Password" required>
+                    <input class="update_user_input" type="password" name="updated_password_password" placeholder="Current Password" required>
+                    <input class="update_user_submit" type="submit" name="submit_password" value="Save">
+                </form>
+            </div>
+            <div>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input id="delete_user_button" type="submit" name="delete_user" value="Delete Account">
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- <div id="edit_user">
         <div id="edit_user_title"><p>Edit Account</p></div>
         <div id="api_keys">
             <div id="new_api_key">
@@ -50,7 +114,7 @@
             </div>
         </div>
     </div>
-    {% endif %}
+    {% endif %} -->
 </div>
 
 

@@ -13,11 +13,11 @@ class UserLoginForm(forms.Form):
 
 class CreateUserForm(ModelForm):
     username = forms.CharField(widget=forms.TextInput(
-        attrs={"placeholder": "Username", "type": "text", "autocomplete": "off", "autofocus": "autofocus"}))
+        attrs={"class": "user_register_field", "placeholder": "Username", "type": "text", "autocomplete": "off", "autofocus": "autofocus", "required": "required"}))
     password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={"placeholder": "Password", "autocomplete": "off", "type": "password"}))
+        attrs={"class": "user_register_field", "placeholder": "Password", "autocomplete": "off", "type": "password", "required": "required"}))
     password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={"placeholder": "Repeat Password", "autocomplete": "off", "type": "password"}))
+        attrs={"class": "user_register_field", "placeholder": "Repeat Password", "autocomplete": "off", "type": "password", "required": "required"}))
 
     class Meta:
         model = get_user_model()

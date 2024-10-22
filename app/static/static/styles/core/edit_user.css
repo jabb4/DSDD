@@ -5,89 +5,149 @@
     justify-content: center;
 }
 
-#delete_user_button {
-    width: auto;
-    background-color: lightcoral;
+#edit_user_title {
+    color: #fff;
+    font-weight: bold;
+    font-size: 35px;
+    margin: 60px 0px;
 }
 
-#change_user_password_button {
-    width: auto;
-}
-
-#edit_user_form {
-    width: 50%;
-    max-width: 500px;
-}
-
-#edit_user_profile_picture {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-#profile_picture_preview {
-    height: 50px;
-    width: 50px;
-    padding: 2px;
-    border: 2px #fff solid;
-    border-radius: 100px;
-    margin-right: 10px;
-}
-
-#new_profile_picture_button {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    text-align: center;
-    background-color: #fff;
-    color: #000;
-    border-radius: 10px;
-    margin-left: 10px;
-    height: 40px;
-    padding: 0px 15px;
-    font-size: 15px;
-}
 
 #edit_user {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: center;
     width: 75%;
     min-width: 200px;
 }
 
-#edit_user_title {
-    color: #fff;
-    font-weight: 500;
-    font-size: 35px;
-    margin: 60px 0px;
-}
-
-
-#change_password {
+#api_keys {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 50%;
 }
 
-#change_password_title {
+#api_keys_title {
     color: #fff;
-    font-size: 35px;
+    font-size: 25px;
     font-weight: 500;
-    margin: 60px 0px;
+    margin: 0px 0px 40px 0px;
 }
 
-#change_password_form {
-    width: 15%;
-    min-width: 200px;
+.api_key {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: rgb(24, 24, 24);
+    border-radius: 20px;
+    margin-bottom: 15px;
 }
+
+.api_key_key {
+    color: #fff;
+    margin: 0px 20px;
+}
+
+.api_key_delete {
+    margin: 15px 20px 15px 0px;
+}
+
+.delete_api_key {
+    background-color: rgb(151, 0, 0);
+    font-weight: bolder;
+    padding: 5px 10px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+#new_api_key {
+    margin-top: 10px;
+}
+
+#new_api_key_button {
+    background-color: rgb(0, 77, 0);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 13px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+#edit_user_fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+
+#edit_user_fields_title {
+    color: #fff;
+    font-size: 25px;
+    font-weight: 500;
+    margin: 0px 0px 40px 0px;
+}
+
+.update_user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+    background-color: rgb(24, 24, 24);
+    padding: 40px 0px;
+    border-radius: 18px;
+    margin-bottom: 30px;
+}
+
+.update_user_title {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0px 0px 40px 0px;
+}
+
+.update_user_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+}
+
+.update_user_input {
+    margin-bottom: 20px;
+    height: 40px;
+}
+
+.update_user_submit {
+    background-color: rgb(0, 77, 0);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 13px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+#delete_user_button {
+    background-color: rgb(151, 0, 0);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 13px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+/* Delet user confirmation */
 
 #delete_user {
     display: flex;
@@ -95,6 +155,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    margin-top: 100px;
 }
 
 #delete_user_title {
@@ -106,22 +167,27 @@
 }
 
 #delete_user_form {
-    width: 25%;
-    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    padding: 40px 0px;
+    border-radius: 18px;
+    margin-bottom: 30px;
 }
 
-#edit_user_buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+#delete_user_input {
+    margin-bottom: 20px;
+    height: 40px;
 }
 
-.edit_user_button {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin: 0px 10px;
+#delete_user_submit {
+    background-color: rgb(151, 0, 0);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 13px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 7px;
 }

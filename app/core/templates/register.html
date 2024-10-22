@@ -1,15 +1,30 @@
 {% extends "main.html" %}
 {% load static %}
 {% block extra_stylesheets %}
+<link rel="stylesheet" href="{% static '/styles/core/register.css' %}">
 {% endblock extra_stylesheets %}
 {% block content %}
 <div id="main">
-    <form action="" method="POST">
-        {% csrf_token %}
-        {% for field in form %}
-        {{field}}
-        {% endfor %}
-        <input type="submit" title="register">
-    </form>
+    <div id="user_register">
+        <div id="user_register_title">
+            <p>Register New User</p>
+        </div>
+        <form id="user_register_form" action="" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            {{field}}
+            {% endfor %}
+            <input id="user_register_submit" type="submit" name="register" value="Register">
+        </form>
+    </div>
 </div>
+<!-- <div id="main">
+<form action="" method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+    {{field}}
+    {% endfor %}
+    <input type="submit" title="register">
+</form>
+</div> -->
 {% endblock content %} 

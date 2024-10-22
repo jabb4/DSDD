@@ -1,60 +1,70 @@
-from django.shortcuts import render, redirect, HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.hashers import check_password
 
 import uuid
 
 from .forms import *
 from .models import User, APIKey
 
-from .validation.validate_username import testUsernameExistence
-from .validation.validate_password import testCurrentPassword, testNewPassword
-
+## Task Imports ##
 from .tasks import example_task
 
-## This is an example view that tests the background task
-def example(request):
-    example_task.delay()
-    return HttpResponse("Example page")
-
-def login_view(request):
-    page = "login"
-    logged_in = request.user.is_authenticated
+## This is an example homepage view that tests the background task
+def homepage_view(request):
+    page = "homepage"
     user = request.user
+    print(user)
+    logged_in = user.is_authenticated
+    print(logged_in)
     error_message = None
     success_message = None
 
     if logged_in:
-        redirect("account")
+        example_task.delay()
+
+    context = {
+        "page": page, "user": user, "logged_in": logged_in, "error_message": error_message, "success_message": success_message,
+
+    }
+    return render(request, "homepage.html", context=context)
+
+def login_view(request):
+    page = "login"
+    user = request.user
+    logged_in = user.is_authenticated
+    error_message = None
+    success_message = None
+
+    if logged_in:
+        return redirect("account")
 
     form = UserLoginForm
 
     try:
-        if request.method == "POST" and request.POST["password"]:
-            form = UserLoginForm(data=request.POST)
-            print(form.errors)
-            if form.is_valid():
-                username = request.POST["username"]
-                password = request.POST["password"]
-                user = authenticate(request, username=username, password=password)
-                if user:
-                    login(request, user)
-                    return redirect("account")
-                else:
-                    error_message = "Username OR Password is not correct"
+        if request.method == "POST" and request.POST["password"] and request.POST["username"] and request.POST["login"]:
+            username = request.POST["username"]
+            password = request.POST["password"]
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect("account")
+            else:
+                error_message = "Username OR Password is not correct"
     except KeyError:
         pass
 
     context = {
-        "page": page, "error_message": error_message, "success_message": success_message,
-        "form": form,
+        "page": page, "user": user, "logged_in": logged_in, "error_message": error_message, "success_message": success_message,
+        "form":form, 
     }
     return render(request, "login.html", context=context)
 
 
 def logout_view(request):
     page = "logout"
-    logged_in = request.user.is_authenticated
     user = request.user
+    logged_in = user.is_authenticated
     error_message = None
     success_message = None
 
@@ -65,8 +75,8 @@ def logout_view(request):
 
 def register_view(request):
     page = "register"
-    logged_in = request.user.is_authenticated
     user = request.user
+    logged_in = user.is_authenticated
     error_message = None
     success_message = None
 
@@ -77,20 +87,24 @@ def register_view(request):
 
     if request.method == "POST":
         try:
-            if request.POST["username"] and request.POST["password1"] and request.POST["password2"]:
+            if request.POST["username"] and request.POST["password1"] and request.POST["password2"] and request.POST["register"]:
                 form=CreateUserForm(request.POST)
+                username = request.POST["username"]
+                password1 = request.POST["password1"]
+                password2 = request.POST["password2"]
 
-                ### Check Username ###
-                error_message = testUsernameExistence(
-                    request=request, username=request.POST["username"])
+                ### Check if username if taken ###
+                if User.objects.filter(username=username):
+                    error_message = "Username is taken!"
+                
+                if username == "AnonymousUser":
+                    error_message = "Username is Forbidden!"
 
                 ### Check Password ###
-                if not error_message:
-                    error_message = testNewPassword(
-                        request.POST["password1"], request.POST["password2"])
+                if not password1 == password2 and not error_message:
+                    error_message = "Passwords do not match!"
 
                 if not error_message:
-                    print("Creating user")
                     user = form.save()
                     user.save()
                     login(request, user)
@@ -105,7 +119,6 @@ def register_view(request):
     return render(request, "register.html", context=context)
 
 def account_view(request):
-    
     page = "account"
     user = request.user
     logged_in = user.is_authenticated
@@ -141,31 +154,65 @@ def account_view(request):
         except KeyError:
             pass
 
+### Update Account Info ###
+    ## Update Username ##
+        try:
+            if request.POST["update_username"] and request.POST["update_username_password"] and request.POST["submit_username"]:
+                new_username = request.POST["update_username"]
+                current_password = request.POST["update_username_password"]
+                test_username = User.objects.filter(username=new_username)
+                if test_username:
+                    error_message = "Username is taken!"
+                elif new_username == "AnonymousUser":
+                    error_message = "Username is Forbidden!"
+                elif check_password(current_password, user.password): 
+                    user.username = new_username
+                    user.save()
+                    success_message = "Username Updated!"
+                else:
+                    error_message = "Incorrect Password!"
+        except KeyError:
+            pass
+    
+    ## Update Password ##
+        try:
+            if request.POST["updated_password"] and request.POST["repeat_updated_password"] and request.POST["updated_password_password"] and request.POST["submit_password"]:
+                new_password1 = request.POST["updated_password"]
+                new_password2 = request.POST["repeat_updated_password"]
+                current_password = request.POST["updated_password_password"]
+                if not new_password1 == new_password2:
+                    error_message = "Passwords do not match!"
+                else:
+                    if check_password(current_password, user.password):
+                        user.set_password(new_password1)
+                        user.save()
+                        update_session_auth_hash(request, user)
+                        success_message = "Password Updated!"
+                    else:
+                        error_message = "Incorrect Password!"
+        except KeyError:
+            pass
+
 ### Delete User ###
+    ## Check for delete button submit ##
         try:
             if request.POST["delete_user"]:
                 page = "edit_user_child"
                 delete_user_page = True
-                form = DeleteUserForm
         except KeyError:
             pass
+    
+    ## Delete User comfirmation ##
         try:
-            if request.POST["delete_user_password"]:
-
-                ### Check if password is current password ###
-                error_message = testCurrentPassword(
-                    request=request, password=request.POST["delete_user_password"])
-
-                if error_message == None:
-
-                    ### Deleting User ###
+            if request.POST["delete_user_password"] and request.POST["delete_user_password_submit"]:
+                current_password = request.POST["delete_user_password"]
+                if check_password(current_password, user.password):
                     user.delete()
                     return redirect("login")
-
                 else:
                     page = "edit_user_child"
                     delete_user_page = True
-                    form = DeleteUserForm
+                    error_message = "Incorrect Password!"
         except KeyError:
             pass
 

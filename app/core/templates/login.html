@@ -6,18 +6,19 @@
 {% block content %}
 <div id="main">
     <div id="user_login">
-        <div id="login_title"><p>Login</p></div>
+        <div id="login_title">
+            <p>Login</p>
+        </div>
         <form id="user_login_form" class="form_form" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
-            {% for field in form %}
-                <div class="form_field">{{field}}</div>
-            {% endfor %}
-            <div class="form_submit">
-                <input type="submit" name="login" value="Login">
-            </div>
+            <input class="user_login_field" type="text" name="username" placeholder="Usename" required>
+            <input class="user_login_field" type="password" name="password" placeholder="Password" required>
+            <input id="user_login_submit" type="submit" name="login" value="Login">
         </form>
         <div id="extra_links">
-            <div class="extra_links_text"><a class="extra_links_link" href="">Forgot your password?</a></div>
+            <div class="extra_links_text">
+                <a class="extra_links_link" href="">Forgot your password?</a>
+            </div>
         </div>
     </div>
 </div>
