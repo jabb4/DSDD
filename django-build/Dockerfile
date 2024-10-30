@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED 1
 COPY ./django-build/requirements.txt /requirements.txt
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
-    /py/bin/pip install -r /requirements.txt
+    /py/bin/pip install --no-cache-dir -r /requirements.txt
 
 COPY ./app /app
 COPY ./django-build/scripts /scripts
